@@ -13,7 +13,7 @@
       </div>
       <div class="card-body">
         <h5 class="card-title"><%= post.title %></h5>
-        <p><%= image_tag(post.image, style: "height: 200px; width: 200px;") %></p>
+        <p><%= image_tag(post.image, style: "height: auto; width: auto;") %></p>
         <p class="card-text"><%= post.description %></p>
         <%= link_to "Mostrar", post, class: 'btn btn-success' %>
       </div>
