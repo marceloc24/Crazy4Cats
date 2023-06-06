@@ -15,6 +15,12 @@ gem "pg", "~> 1.1"
 #devise
 gem 'devise', '~> 4.9', '>= 4.9.2'
 
+#faker
+gem 'faker'
+
+#fa
+gem 'font-awesome-rails', '~> 4.7', '>= 4.7.0.8'
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 

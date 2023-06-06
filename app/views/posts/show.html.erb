@@ -1,10 +1,58 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @post %>
-
-<div>
-  <%= link_to "Edit this post", edit_post_path(@post) %> |
-  <%= link_to "Back to posts", posts_path %>
-
-  <%= button_to "Destroy this post", @post, method: :delete %>
+<div class = "mb-3">
+  <%= link_to "Volver", posts_path, class: 'btn btn-secondary' %>
 </div>
+
+<div class="card" style="width: flex;">
+  <div class="card-header">
+      <h6 class="card-subtitle mb-2 text-body-secondary"><%= @post.user.email %></h6>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title"><%= @post.title %></h5>
+    <p><%= image_tag(@post.image, style: "height: 200px; width: 200px;") %></p>
+    <p class="card-text"><%= @post.description %></p>
+    <% if user_signed_in? %>
+      <div class = "d-flex justify-content-between">
+        <div class = "d-flex justify-content-start">
+          <% if current_user.id == @post.user.id %>
+            <%= link_to "Editar", edit_post_path(@post), class: 'btn btn-info', style: 'margin: 5px;' %>
+            <%= button_to "Eliminar", @post, method: :delete, class: 'btn btn-danger', style: 'margin: 5px;' %>
+          <% end %>
+        </div>
+        <div class = "d-flex justify-content-end">
+          <% Post::Kinds.each do |kind| %>
+            <% if kind == 'like' %>
+              <%= button_to "#{Post::KindsSpanish[kind]} <i class='fas fa-thumbs-up'></i>".html_safe, new_user_reaction_path(post_id: @post.id, reaction_type: "post", kind: kind), method: :post, class: 'btn btn-primary', style: 'margin: 5px;' %>
+            <% else kind == 'dislike' %>
+              <%= button_to "#{Post::KindsSpanish[kind]} <i class='fas fa-thumbs-down'></i>".html_safe, new_user_reaction_path(post_id: @post.id, reaction_type: "post", kind: kind), method: :post, class: 'btn btn-danger', style: 'margin: 5px;' %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 10px;">
+  <div class="card-body">
+    <h2>Comentarios</h2>
+    <%= render 'comments/form' %>
+  </div>
+</div>
+
+<div style="margin-top: auto; margin-bottom: 10px">
+  <% @comments.each do |comment| %>
+    <div class="card" style="width: flex; margin-top: 10px;">
+      <div class="card-body">
+        <% if comment.user.nil? %>
+          <h6 class="card-title">Escrito por: Anónimo</h6>
+        <% else %>
+          <h6 class="card-title">Escrito por: <%= comment.user.email %></h6>
+        <% end %>
+        <p class="card-text"><%= comment.content %></p>
+      </div>
+    </div>
+  <% end %>
+</div>
+

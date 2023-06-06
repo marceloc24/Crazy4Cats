@@ -1,5 +1,13 @@
 class PostsController < ApplicationController
   before_action :set_post, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action only: [:new, :create] do
+    authorize_request(["author","admin"])
+  end
+
+  before_action only: [:edit, :update, :destroy] do
+    authorize_request(["author","admin"])
+  end
 
   # GET /posts or /posts.json
   def index
@@ -8,6 +16,8 @@ class PostsController < ApplicationController
 
   # GET /posts/1 or /posts/1.json
   def show
+    @comment = Comment.new
+    @comments = @post.comments
   end
 
   # GET /posts/new
@@ -65,6 +75,6 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:title, :image, :description)
+      params.required(:post).permit(:title, :image, :description, :user_id)
     end
 end
